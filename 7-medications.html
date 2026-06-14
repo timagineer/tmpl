@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prototype: Mobile Forms [DO-#####]</title>
+    <script src="app.js" defer></script>
+    <link rel="stylesheet" href="app.css">
+    <meta name="author" content="ICANotes, LLC">
+    <meta name="description" content="mobile forms system">
+</head>
+
+<body class="cover">
+
+    <header class="stack-x">
+        <span class="logo">Therhappy Patient Portal</span>
+        <nav class="header-nav" aria-label="Main">
+            <a href="#">Home</a>
+            <a href="#">Appointments</a>
+            <a href="index.html" class="active">Documents</a>
+            <a href="#">Messages</a>
+            <a href="#">Profile</a>
+        </nav>
+        <button class="user-menu" aria-expanded="false">
+            Maximillion
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+        </button>
+        <button id="main-menu" class="with-icon" onclick="menu()" aria-expanded="false" aria-label="Open menu">
+            <svg class="icon" viewBox="0 0 10 10" stroke="currentColor" stroke-width="1.3">
+                <path class="menu" d="M0,1 10,1 M0,5 10,5 M0,9 10,9" />
+                <path class="x" d="M1,1 9,9 M5,5 5,5 M1,9 9,1" />
+            </svg>
+        </button>
+    </header>
+
+    <div class="stack-y" style="--gap:var(--space-05-15)">
+        <nav class="breadcrumbs"><a href="index.html">Documents</a> <a href="index.html">Standard Intake</a></nav>
+        <h1>Social History Questionnaire</h1>
+    </div>
+    <progress-bar value="2.5" max="100" label="Form completion"></progress-bar>
+
+    <main>
+        <form class="stack-y" style="--gap:var(--space-50)">
+
+            <div class="field">
+                <div class="split-x slider-header">
+                    <label for="mood-input">How would you rate your mood today?</label>
+                    <span class="slider-value">5</span>
+                </div>
+                <div class="slider-wrap">
+                    <input id="mood-input" name="moodScore" type="range" min="0" max="10" value="5" aria-valuemin="0" aria-valuemax="10" aria-valuenow="5">
+                    <div class="slider-labels">
+                        <span class="slider-label"><span class="slider-emoji">&#128542;</span> Worst</span>
+                        <span class="slider-label">Best <span class="slider-emoji">&#128512;</span></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="field">
+                <label for="medication-input">Current medications</label>
+                <div class="chip-container" id="chip-container" aria-label="Selected medications"></div>
+                <div class="combobox-wrap">
+                    <input id="medication-input" type="text" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="medication-listbox" aria-activedescendant="" aria-multiselectable="true" autocomplete="off" placeholder="Search medications…">
+                    <ul id="medication-listbox" role="listbox" aria-label="Medications" hidden></ul>
+                </div>
+                <div class="hint">Type to search, Enter to select, Backspace to remove last</div>
+            </div>
+
+            <div class="field">
+                <label for="pharmacy-input">Preferred pharmacy</label>
+                <div class="combobox-wrap">
+                    <input id="pharmacy-input" type="text" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="pharmacy-listbox" aria-activedescendant="" autocomplete="off" placeholder="Search pharmacies…">
+                    <ul id="pharmacy-listbox" role="listbox" aria-label="Pharmacies" hidden></ul>
+                    <div class="hint">Choose from the list or type your pharmacy name</div>
+                </div>
+
+        </form>
+    </main>
+
+    <footer>
+        <nav class="stack-x">
+            <button onclick="save()">Save</button>
+            <span class="stack-x">
+                <a href="6-history.html" class="btn">Back</a>
+                <a href="8-notes-upload.html" class="btn">Next</a>
+            </span>
+        </nav>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const MEDICATIONS = [
+                'Alprazolam (Xanax)', 'Amitriptyline (Elavil)', 'Aripiprazole (Abilify)',
+                'Atomoxetine (Strattera)', 'Bupropion (Wellbutrin)', 'Buspirone (BuSpar)',
+                'Carbamazepine (Tegretol)', 'Citalopram (Celexa)', 'Clonazepam (Klonopin)',
+                'Clonidine (Catapres)', 'Desvenlafaxine (Pristiq)', 'Diazepam (Valium)',
+                'Duloxetine (Cymbalta)', 'Escitalopram (Lexapro)', 'Fluoxetine (Prozac)',
+                'Gabapentin (Neurontin)', 'Hydroxyzine (Vistaril)', 'Lamotrigine (Lamictal)',
+                'Lithium (Lithobid)', 'Lorazepam (Ativan)', 'Methylphenidate (Ritalin)',
+                'Mirtazapine (Remeron)', 'Olanzapine (Zyprexa)', 'Paroxetine (Paxil)',
+                'Prazosin (Minipress)', 'Quetiapine (Seroquel)', 'Risperidone (Risperdal)',
+                'Sertraline (Zoloft)', 'Topiramate (Topamax)', 'Trazodone (Desyrel)',
+                'Valproic Acid (Depakote)', 'Venlafaxine (Effexor)', 'Ziprasidone (Geodon)'
+            ];
+
+            const input = document.getElementById('medication-input');
+            const listbox = document.getElementById('medication-listbox');
+            const chipContainer = document.getElementById('chip-container');
+            const selected = new Set();
+            let activeIndex = -1;
+
+            function buildOptions(filter) {
+                const matches = filter
+                    ? MEDICATIONS.filter(m => m.toLowerCase().includes(filter.toLowerCase()))
+                    : [];
+                listbox.innerHTML = '';
+                activeIndex = -1;
+
+                if (!matches.length) { close(); return; }
+
+                matches.forEach((med, i) => {
+                    const li = document.createElement('li');
+                    li.id = `med-option-${i}`;
+                    li.role = 'option';
+                    li.textContent = med;
+                    if (selected.has(med)) li.setAttribute('aria-selected', 'true');
+                    li.addEventListener('click', () => toggle(med));
+                    listbox.appendChild(li);
+                });
+                open();
+            }
+
+            function open() {
+                listbox.hidden = false;
+                input.setAttribute('aria-expanded', 'true');
+            }
+
+            function close() {
+                listbox.hidden = true;
+                input.setAttribute('aria-expanded', 'false');
+                input.setAttribute('aria-activedescendant', '');
+                activeIndex = -1;
+            }
+
+            function toggle(value) {
+                if (selected.has(value)) {
+                    remove(value);
+                } else {
+                    selected.add(value);
+                    addChip(value);
+                }
+                input.value = '';
+                buildOptions('');
+                input.focus();
+                saveField('medications', [...selected]);
+                updateProgress();
+                checkFormComplete();
+            }
+
+            function addChip(value) {
+                const chip = document.createElement('span');
+                chip.className = 'chip';
+                chip.dataset.value = value;
+                chip.innerHTML = `${value}<button class="chip-remove" aria-label="Remove ${value}"><svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" fill="none"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>`;
+                chip.querySelector('button').addEventListener('click', () => remove(value));
+                chipContainer.appendChild(chip);
+            }
+
+            function remove(value) {
+                selected.delete(value);
+                chipContainer.querySelector(`[data-value="${CSS.escape(value)}"]`)?.remove();
+                if (!listbox.hidden) buildOptions(input.value);
+                saveField('medications', [...selected]);
+                updateProgress();
+                checkFormComplete();
+            }
+
+            function setActive(index) {
+                const options = listbox.querySelectorAll('[role="option"]');
+                options.forEach(o => o.classList.remove('active'));
+                if (index >= 0 && index < options.length) {
+                    activeIndex = index;
+                    options[index].classList.add('active');
+                    input.setAttribute('aria-activedescendant', options[index].id);
+                    options[index].scrollIntoView({ block: 'nearest' });
+                }
+            }
+
+            input.addEventListener('input', () => buildOptions(input.value));
+
+            input.addEventListener('keydown', (e) => {
+                const options = listbox.querySelectorAll('[role="option"]');
+
+                switch (e.key) {
+                    case 'ArrowDown':
+                        e.preventDefault();
+                        if (!options.length) return;
+                        setActive(Math.min(activeIndex + 1, options.length - 1));
+                        break;
+                    case 'ArrowUp':
+                        e.preventDefault();
+                        if (!options.length) return;
+                        setActive(Math.max(activeIndex - 1, 0));
+                        break;
+                    case 'Enter':
+                        e.preventDefault();
+                        if (activeIndex >= 0 && options[activeIndex]) toggle(options[activeIndex].textContent);
+                        break;
+                    case 'Escape':
+                        close();
+                        break;
+                    case 'Backspace':
+                        if (!input.value && selected.size) {
+                            const last = [...selected].pop();
+                            remove(last);
+                        }
+                        break;
+                }
+            });
+
+            input.addEventListener('blur', () => setTimeout(close, 150));
+
+            // -- pharmacy single-select ---------------------------
+            const PHARMACIES = [
+                'CVS Pharmacy', 'Walgreens', 'Rite Aid', 'Walmart Pharmacy',
+                'Costco Pharmacy', 'Kroger Pharmacy', 'Publix Pharmacy',
+                'Safeway Pharmacy', 'Target Pharmacy (CVS)', 'Albertsons Pharmacy',
+                'Sam\'s Club Pharmacy', 'Meijer Pharmacy', 'H-E-B Pharmacy',
+                'Duane Reade', 'Kinney Drugs', 'Good Neighbor Pharmacy',
+                'Mail-order/Express Scripts', 'Mail-order/OptumRx',
+                'Mail-order/Caremark', 'Other'
+            ];
+
+            const pharmInput = document.getElementById('pharmacy-input');
+            const pharmListbox = document.getElementById('pharmacy-listbox');
+            let pharmActiveIndex = -1;
+
+            function pharmBuildOptions(filter) {
+                const matches = filter
+                    ? PHARMACIES.filter(p => p.toLowerCase().includes(filter.toLowerCase()))
+                    : PHARMACIES;
+                pharmListbox.innerHTML = '';
+                pharmActiveIndex = -1;
+                if (!matches.length) { pharmClose(); return; }
+                matches.forEach((p, i) => {
+                    const li = document.createElement('li');
+                    li.id = `pharm-option-${i}`;
+                    li.role = 'option';
+                    li.textContent = p;
+                    li.addEventListener('click', () => pharmSelect(p));
+                    pharmListbox.appendChild(li);
+                });
+                pharmOpen();
+            }
+
+            function pharmOpen() {
+                pharmListbox.hidden = false;
+                pharmInput.setAttribute('aria-expanded', 'true');
+            }
+
+            function pharmClose() {
+                pharmListbox.hidden = true;
+                pharmInput.setAttribute('aria-expanded', 'false');
+                pharmInput.setAttribute('aria-activedescendant', '');
+                pharmActiveIndex = -1;
+            }
+
+            function pharmSelect(value) {
+                pharmInput.value = value;
+                pharmClose();
+                pharmInput.focus();
+                saveField('pharmacy', value);
+                updateProgress();
+                checkFormComplete();
+            }
+
+            function pharmSetActive(index) {
+                const options = pharmListbox.querySelectorAll('[role="option"]');
+                options.forEach(o => o.classList.remove('active'));
+                if (index >= 0 && index < options.length) {
+                    pharmActiveIndex = index;
+                    options[index].classList.add('active');
+                    pharmInput.setAttribute('aria-activedescendant', options[index].id);
+                    options[index].scrollIntoView({ block: 'nearest' });
+                }
+            }
+
+            pharmInput.addEventListener('focus', () => pharmBuildOptions(pharmInput.value));
+            pharmInput.addEventListener('input', () => pharmBuildOptions(pharmInput.value));
+
+            pharmInput.addEventListener('keydown', (e) => {
+                const options = pharmListbox.querySelectorAll('[role="option"]');
+                switch (e.key) {
+                    case 'ArrowDown':
+                        e.preventDefault();
+                        if (!pharmListbox.hidden) pharmSetActive(Math.min(pharmActiveIndex + 1, options.length - 1));
+                        else pharmBuildOptions(pharmInput.value);
+                        break;
+                    case 'ArrowUp':
+                        e.preventDefault();
+                        pharmSetActive(Math.max(pharmActiveIndex - 1, 0));
+                        break;
+                    case 'Enter':
+                        e.preventDefault();
+                        if (pharmActiveIndex >= 0 && options[pharmActiveIndex]) pharmSelect(options[pharmActiveIndex].textContent);
+                        break;
+                    case 'Escape':
+                        pharmClose();
+                        break;
+                }
+            });
+
+            pharmInput.addEventListener('blur', () => setTimeout(pharmClose, 150));
+
+            // -- mood slider ---------------------------------------
+            const moodInput = document.getElementById('mood-input');
+            const moodValue = document.querySelector('.slider-value');
+            moodInput.addEventListener('input', () => {
+                moodValue.textContent = moodInput.value;
+                moodInput.setAttribute('aria-valuenow', moodInput.value);
+            });
+
+            // -- restore combobox values ---------------------------
+            const saved = getFormData();
+            if (Array.isArray(saved.medications)) {
+                saved.medications.forEach(med => { selected.add(med); addChip(med); });
+            }
+            if (saved.pharmacy) pharmInput.value = saved.pharmacy;
+            if (saved.moodScore) {
+                moodInput.value = saved.moodScore;
+                moodValue.textContent = saved.moodScore;
+                moodInput.setAttribute('aria-valuenow', saved.moodScore);
+            }
+        });
+    </script>
+
+</html>

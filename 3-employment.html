@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prototype: Mobile Forms [DO-#####]</title>
+    <link rel="stylesheet" href="app.css">
+    <script src="app.js" defer></script>
+    <meta name="author" content="ICANotes, LLC">
+    <meta name="description" content="mobile forms system">
+</head>
+
+<body class="cover">
+
+    <header class="stack-x">
+        <span class="logo">Therhappy Patient Portal</span>
+        <nav class="header-nav" aria-label="Main">
+            <a href="#">Home</a>
+            <a href="#">Appointments</a>
+            <a href="index.html" class="active">Documents</a>
+            <a href="#">Messages</a>
+            <a href="#">Profile</a>
+        </nav>
+        <button class="user-menu" aria-expanded="false">
+            Maximillion
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+        </button>
+        <button id="main-menu" class="with-icon" onclick="menu()" aria-expanded="false" aria-label="Open menu">
+            <svg class="icon" viewBox="0 0 10 10" stroke="currentColor" stroke-width="1.3">
+                <path class="menu" d="M0,1 10,1 M0,5 10,5 M0,9 10,9" />
+                <path class="x" d="M1,1 9,9 M5,5 5,5 M1,9 9,1" />
+            </svg>
+        </button>
+    </header>
+
+    <div class="stack-y" style="--gap:var(--space-05-15)">
+        <nav class="breadcrumbs"><a href="index.html">Documents</a> <a href="index.html">Standard Intake</a></nav>
+        <h1>Social History Questionnaire</h1>
+    </div>
+    <progress-bar value="2.5" max="100" label="Form completion"></progress-bar>
+
+    <main>
+        <form class="stack-y" style="--gap:var(--space-50)">
+            <div class="stack-y" style="--gap:var(--space-15-25)" role="radiogroup" aria-labelledby="q-employment" aria-required="true">
+                <h2 id="q-employment" class="required">Which describes your employment status?</h2>
+                <div class="box split-x">
+                    <label for="1">Employed and satisfied</label>
+                    <input id="1" name="q" type="radio" value="employed-satisfied" />
+                </div>
+                <div class="box split-x">
+                    <label for="2">Employed but dissatisfied</label>
+                    <input id="2" name="q" type="radio" value="employed-dissatisfied" />
+                </div>
+                <div class="box split-x">
+                    <label for="3">Unemployed</label>
+                    <input id="3" name="q" type="radio" value="unemployed" />
+                </div>
+                <div class="box split-x">
+                    <label for="4">Coworker conflicts</label>
+                    <input id="4" name="q" type="radio" value="coworker-conflicts" />
+                </div>
+                <div class="box split-x">
+                    <label for="5">Supervisor conflicts</label>
+                    <input id="5" name="q" type="radio" value="supervisor-conflicts" />
+                </div>
+                <div class="box split-x">
+                    <label for="6">Unstable work history</label>
+                    <input id="6" name="q" type="radio" value="unstable-history" />
+                </div>
+                <div class="box split-x">
+                    <label for="7">Disabled</label>
+                    <input id="7" name="q" type="radio" value="disabled" />
+                </div>
+                <div class="error-message" hidden>Please select an option</div>
+            </div>
+        </form>
+    </main>
+
+    <footer>
+        <nav class="stack-x">
+            <button onclick="save()">Save</button>
+            <span class="stack-x">
+                <a href="2-demographics.html" class="btn">Back</a>
+                <a href="4-living.html" class="btn">Next</a>
+            </span>
+        </nav>
+    </footer>
+
+</body>
+
+</html>

@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prototype: Mobile Forms [DO-#####]</title>
+    <link rel="stylesheet" href="app.css">
+    <script src="app.js" defer></script>
+    <meta name="author" content="ICANotes, LLC">
+    <meta name="description" content="mobile forms system">
+</head>
+
+<body class="cover">
+
+    <header class="stack-x">
+        <span class="logo">Therhappy Patient Portal</span>
+        <nav class="header-nav" aria-label="Main">
+            <a href="#">Home</a>
+            <a href="#">Appointments</a>
+            <a href="index.html" class="active">Documents</a>
+            <a href="#">Messages</a>
+            <a href="#">Profile</a>
+        </nav>
+        <button class="user-menu" aria-expanded="false">
+            Maximillion
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+        </button>
+        <button id="main-menu" class="with-icon" onclick="menu()" aria-expanded="false" aria-label="Open menu">
+            <svg class="icon" viewBox="0 0 10 10" stroke="currentColor" stroke-width="1.3">
+                <path class="menu" d="M0,1 10,1 M0,5 10,5 M0,9 10,9" />
+                <path class="x" d="M1,1 9,9 M5,5 5,5 M1,9 9,1" />
+            </svg>
+        </button>
+    </header>
+
+    <div class="stack-y" style="--gap:var(--space-05-15)">
+        <nav class="breadcrumbs"><a href="index.html">Documents</a> <a href="index.html">Standard Intake</a></nav>
+        <h1>Social History Questionnaire</h1>
+    </div>
+    <progress-bar value="2.5" max="100" label="Form completion"></progress-bar>
+
+    <main>
+        <form class="stack-y" style="--gap:var(--space-50)">
+            <div class="form-grid-3">
+                <div class="field required">
+                    <label for="first-name">First name</label>
+                    <input id="first-name" name="firstName" type="text" autocomplete="given-name" aria-required="true" aria-describedby="first-name-error">
+                    <div id="first-name-error" class="error-message" hidden>First name is required</div>
+                </div>
+
+                <div class="field required">
+                    <label for="last-name">Last name</label>
+                    <input id="last-name" name="lastName" type="text" autocomplete="family-name" aria-required="true" aria-describedby="last-name-error">
+                    <div id="last-name-error" class="error-message" hidden>Last name is required</div>
+                </div>
+
+                <div class="field">
+                    <label for="preferred-name">Preferred name</label>
+                    <input id="preferred-name" name="preferredName" type="text" autocomplete="nickname">
+                </div>
+            </div>
+
+            <div class="form-grid-3">
+                <div class="field required">
+                    <label for="dob">Date of birth</label>
+                    <input id="dob" name="dob" type="date" aria-required="true" aria-describedby="dob-error">
+                    <div id="dob-error" class="error-message" hidden>Date of birth is required</div>
+                </div>
+
+                <div class="field required">
+                    <label for="email">Email</label>
+                    <input id="email" name="email" type="email" inputmode="email" autocomplete="email" placeholder="me@domain.com" aria-required="true" aria-describedby="email-error">
+                    <div id="email-error" class="error-message" hidden>Please enter a valid email</div>
+                </div>
+
+                <div class="field required">
+                    <label for="phone">Phone number</label>
+                    <input id="phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="555-555-5555" aria-required="true" aria-describedby="phone-error">
+                    <div id="phone-error" class="error-message" hidden>Please enter a valid phone number</div>
+                </div>
+            </div>
+
+            <div class="form-grid-3">
+                <div class="field required">
+                    <label for="address">Street address</label>
+                    <input id="address" name="address" type="text" autocomplete="street-address" aria-required="true" aria-describedby="address-error">
+                    <div id="address-error" class="error-message" hidden>Address is required</div>
+                </div>
+
+                <div class="field required">
+                    <label for="state">State</label>
+                    <select id="state" name="state" aria-required="true" aria-describedby="state-error">
+                        <option value="">Select…</option>
+                            <option>Maryland</option>
+                            <option>Alabama</option>
+                            <option>Alaska</option>
+                            <option>Arizona</option>
+                            <option>Arkansas</option>
+                            <option>California</option>
+                            <option>Colorado</option>
+                            <option>Connecticut</option>
+                            <option>Delaware</option>
+                            <option>Florida</option>
+                            <option>Georgia</option>
+                            <option>Hawaii</option>
+                            <option>Idaho</option>
+                            <option>Illinois</option>
+                            <option>Indiana</option>
+                            <option>Iowa</option>
+                            <option>Kansas</option>
+                            <option>Kentucky</option>
+                            <option>Louisiana</option>
+                            <option>Maine</option>
+                            <option>Maryland</option>
+                            <option>Massachusetts</option>
+                            <option>Michigan</option>
+                            <option>Minnesota</option>
+                            <option>Mississippi</option>
+                            <option>Missouri</option>
+                            <option>Montana</option>
+                            <option>Nebraska</option>
+                            <option>Nevada</option>
+                            <option>New Hampshire</option>
+                            <option>New Jersey</option>
+                            <option>New Mexico</option>
+                            <option>New York</option>
+                            <option>North Carolina</option>
+                            <option>North Dakota</option>
+                            <option>Ohio</option>
+                            <option>Oklahoma</option>
+                            <option>Oregon</option>
+                            <option>Pennsylvania</option>
+                            <option>Rhode Island</option>
+                            <option>South Carolina</option>
+                            <option>South Dakota</option>
+                            <option>Tennessee</option>
+                            <option>Texas</option>
+                            <option>Utah</option>
+                            <option>Vermont</option>
+                            <option>Virginia</option>
+                            <option>Washington</option>
+                            <option>West Virginia</option>
+                            <option>Wisconsin</option>
+                            <option>Wyoming</option>
+                        </select>
+                        <div id="state-error" class="error-message" hidden>Please select a state</div>
+                    </div>
+
+                    <div class="field required">
+                        <label for="zip">ZIP code</label>
+                        <input id="zip" name="zip" type="text" inputmode="numeric" pattern="[0-9]{5}" placeholder="e.g. 21201" autocomplete="postal-code" aria-required="true" aria-describedby="zip-error">
+                        <div id="zip-error" class="error-message" hidden>ZIP code is required</div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </main>
+
+    <footer>
+        <nav class="stack-x">
+            <button onclick="save()">Save</button>
+            <span class="stack-x">
+                <a href="1-start.html" class="btn">Back</a>
+                <a href="3-employment.html" class="btn">Next</a>
+            </span>
+        </nav>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const firstName = document.getElementById('first-name');
+            const preferredName = document.getElementById('preferred-name');
+            let userEditedPreferred = false;
+
+            preferredName.addEventListener('input', () => { userEditedPreferred = true; });
+            firstName.addEventListener('input', () => {
+                if (!userEditedPreferred) preferredName.value = firstName.value;
+            });
+        });
+    </script>
+</body>
+
+</html>
