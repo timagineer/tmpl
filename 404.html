@@ -1,2 +1,96 @@
-<h1 style="font-family:ui-monospace,monospace">404: Page not found!</h1>
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404: Page Not Found…SUCKA!</title>
+    <style>
+        :where(*, *::after, *::before) {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            font-size: 100%;
+            -webkit-text-size-adjust: none;
+            text-size-adjust: none;
+        }
+
+        :root {
+            color-scheme: light dark;
+            --bg: light-dark(hsl(0, 0%, 96%), hsl(0, 0%, 8%));
+            --fg: light-dark(hsl(0, 0%, 12%), hsl(0, 0%, 86%));
+            --font-size-yuge: clamp(4.735625rem, 0.73rem + 19.44vw, 15.671875rem);
+            --font-base: ui-monospace, monospace;
+            --font-black: 900;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--fg);
+            font-family: var(--font-base);
+            font-size: var(--size-step-1);
+            font-size-adjust: from-font;
+            min-height: 100dvh;
+            margin: 0;
+            display: flex;
+            align-items: center;
+        }
+
+        h1 {
+            width: 100%;
+            font-weight: var(--font-black);
+        }
+
+        .container-fill-text {
+            --container-fill-text-captured-length: initial;
+            display: flex;
+            container-type: inline-size;
+            line-height: 1;
+            font-weight: var(--font-black);
+        }
+
+        .container-fill-text-reference {
+            visibility: hidden;
+        }
+
+        .container-fill-text-container {
+            flex-grow: 1;
+            container-type: inline-size;
+            --container-fill-text-captured-length: 100cqi;
+            --available-space: var(--container-fill-text-captured-length);
+        }
+
+        .container-fill-text-display {
+            --container-fill-text-captured-length: 100cqi;
+            --ratio: tan(atan2(var(--available-space), var(--available-space) - var(--container-fill-text-captured-length)));
+            display: block;
+            inline-size: var(--available-space);
+            font-size: var(--font-size-yuge);
+            font-size: clamp(var(--font-size-yuge),
+                    1em * var(--ratio),
+                    var(--max-font-size, infinity * 1px));
+        }
+
+        @property --container-fill-text-captured-length {
+            syntax: '<length>';
+            initial-value: 0px;
+            inherits: true;
+        }
+    </style>
+    <meta name="author" content="Timothy Martens">
+    <meta name="description" content="404: Page Not Found">
+</head>
+
+<body>
+    <h1 class="container-fill-text">
+        <span class="container-fill-text-container">
+            <span class="container-fill-text-display">404</span>
+        </span>
+        <span class="container-fill-text-reference" aria-hidden="true">404</span>
+    </h1>
+</body>
+
+</html>
