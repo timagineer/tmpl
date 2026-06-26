@@ -1,96 +1,238 @@
 <!DOCTYPE html>
 <html lang="en">
+<!--
+Attributions
+Roman Komarov: https://kizu.dev/fit-to-width/
+Andy Bell: https://piccalil.li/blog/riffing-on-the-latest-css-fit-text-approach/
+  -->
 
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>404: Page Not Found…SUCKA!</title>
     <style>
-        :where(*, *::after, *::before) {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        @layer config, reset, native, layouts, components, utils;
+
+        @layer config {
+
+            :where(:host, :root) {
+
+                /* Typography */
+                --text-mono: ui-monospace, monospace;
+                --text-size-10: 0.9375rem;
+                --text-size-15: 1.166rem;
+                --text-leading: 1;
+                --text-tracking: 0.130em;
+                --text-weight-400: 400;
+                --text-weight-500: 500;
+                --text-weight-900: 900;
+                --text-size-body: clamp(var(--text-size-10), 0.8722rem + 0.3264vw, var(--text-size-15));
+                --text-size-huge: clamp(4.735625rem, 0.73rem + 19.44vw, 15.671875rem);
+
+                /* Space */
+                --space-05: 0.09375rem;
+                --space-10: 0.125rem;
+                --space-50: 1.25rem;
+                --space-55: 1.5rem;
+
+                color-scheme: light dark;
+
+                /* Color */
+                --brand-l: oklch(57.125% 0.23443 29.223);
+                --brand-d: oklch(0.678 0.2673 34.94);
+                --black: #000000;
+                --white: #ffffff;
+                --slate-06: #0d0f11;
+                --slate-12: #1b1e22;
+                --slate-30: #434b56;
+                --slate-40: #5a6472;
+                --slate-58: #8791a1;
+                --slate-70: #a9b1bc;
+                --slate-88: #dde0e4;
+                --slate-96: #f4f5f6;
+
+                --brand: light-dark(var(--brand-l), var(--brand-d));
+                --canvas: light-dark(var(--slate-96), var(--slate-06));
+                --text-body: light-dark(var(--slate-12), var(--slate-88));
+                --text-link: light-dark(var(--slate-30), var(--slate-70));
+                --text-muted: light-dark(var(--slate-40), var(--slate-58));
+                --text-underline-hover: var(--canvas);
+                --focus-ring-color: light-dark(var(--black), var(--white));
+                --focus-ring-color-outer: light-dark(var(--white), var(--black));
+
+                --link-transition: color 420ms ease, text-decoration-color 420ms ease, text-underline-offset 240ms cubic-bezier(.9, 0, .1, 1);
+            }
         }
 
-        html {
-            font-size: 100%;
-            -webkit-text-size-adjust: none;
-            text-size-adjust: none;
+        @layer reset {
+
+            :where(*, *::after, *::before) {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
+            html {
+                font-size: 100%;
+                -webkit-text-size-adjust: none;
+                text-size-adjust: none;
+                line-height: var(--text-leading);
+            }
+
+            @media (prefers-reduced-motion: no-preference) {
+                html {
+                    scroll-behavior: smooth;
+                }
+            }
+
         }
 
-        :root {
-            color-scheme: light dark;
-            --bg: light-dark(hsl(0, 0%, 96%), hsl(0, 0%, 8%));
-            --fg: light-dark(hsl(0, 0%, 12%), hsl(0, 0%, 86%));
-            --font-size-yuge: clamp(4.735625rem, 0.73rem + 19.44vw, 15.671875rem);
-            --font-base: ui-monospace, monospace;
-            --font-black: 900;
+        @layer native {
+
+            body {
+                background: var(--canvas);
+                color: var(--text-body);
+                font-family: var(--text-mono);
+                font-size: var(--text-size-body);
+                font-size-adjust: from-font;
+                font-kerning: normal;
+                font-optical-sizing: auto;
+                font-variant-ligatures: common-ligatures no-discretionary-ligatures no-historical-ligatures contextual;
+                text-decoration-skip-ink: auto;
+                overflow: hidden;
+            }
+
+            :where(footer, header, main) {
+                text-align: center;
+                width: 100%;
+            }
+
+            :where(footer, header) {
+                color: var(--text-muted);
+                font-weight: var(--text-weight-500);
+            }
+
+            @media (prefers-color-scheme: dark) {
+                :where(footer, header) {
+                    font-weight: var(--text-weight-400);
+                }
+            }
+
+            header {
+                letter-spacing: var(--text-tracking);
+                text-transform: uppercase;
+            }
+
+            :focus-visible {
+                outline: 3px solid var(--focus-ring-color);
+                outline-offset: 3px;
+                border-radius: 3px;
+                box-shadow: 0 0 0 6px var(--focus-ring-color-outer);
+            }
+
+            h1 {
+                font-weight: var(--text-weight-900);
+            }
+
+            a {
+                color: var(--text-link);
+                text-underline-offset: var(--space-10);
+                text-decoration-thickness: var(--space-05);
+                transition: var(--link-transition);
+            }
+
+            a:hover {
+                color: var(--brand);
+                text-underline-offset: var(--space-55);
+                text-decoration-color: var(--text-underline-hover);
+            }
+
         }
 
-        body {
-            background: var(--bg);
-            color: var(--fg);
-            font-family: var(--font-base);
-            font-size: var(--size-step-1);
-            font-size-adjust: from-font;
-            min-height: 100dvh;
-            margin: 0;
-            display: flex;
-            align-items: center;
+        @layer layouts {
+
+            .cover {
+                display: flex;
+                flex-direction: column;
+                min-block-size: 100dvh;
+                padding: var(--space-50);
+            }
+
+            .cover> :first-child:not(main) {
+                margin-block-start: 0;
+            }
+
+            .cover> :last-child:not(main) {
+                margin-block-end: 0;
+            }
+
+            .cover>main {
+                margin-block: auto;
+                min-height: 0;
+            }
         }
 
-        h1 {
-            width: 100%;
-            font-weight: var(--font-black);
+        @layer components {
+
+            .fill-text {
+                --text-size-huge-captured-length: initial;
+                display: flex;
+                container-type: inline-size;
+                font-weight: var(--text-weight-900);
+            }
+
+            .fill-text-reference {
+                visibility: hidden;
+            }
+
+            .fill-text-container {
+                flex-grow: 1;
+                container-type: inline-size;
+                --text-size-huge-captured-length: 100cqi;
+                --available-space: var(--text-size-huge-captured-length);
+            }
+
+            .fill-text-display {
+                --text-size-huge-captured-length: 100cqi;
+                --ratio: tan(atan2(var(--available-space), var(--available-space) - var(--text-size-huge-captured-length)));
+                display: block;
+                inline-size: var(--available-space);
+                font-size: var(--text-size-huge);
+                font-size: clamp(var(--text-size-huge),
+                        1em * var(--ratio),
+                        min(var(--max-font-size, infinity * 1px), 90dvh));
+            }
+
+            @property --text-size-huge-captured-length {
+                syntax: '<length>';
+                initial-value: 0px;
+                inherits: true;
+            }
         }
 
-        .container-fill-text {
-            --container-fill-text-captured-length: initial;
-            display: flex;
-            container-type: inline-size;
-            line-height: 1;
-            font-weight: var(--font-black);
-        }
+        @layer utils {
 
-        .container-fill-text-reference {
-            visibility: hidden;
-        }
-
-        .container-fill-text-container {
-            flex-grow: 1;
-            container-type: inline-size;
-            --container-fill-text-captured-length: 100cqi;
-            --available-space: var(--container-fill-text-captured-length);
-        }
-
-        .container-fill-text-display {
-            --container-fill-text-captured-length: 100cqi;
-            --ratio: tan(atan2(var(--available-space), var(--available-space) - var(--container-fill-text-captured-length)));
-            display: block;
-            inline-size: var(--available-space);
-            font-size: var(--font-size-yuge);
-            font-size: clamp(var(--font-size-yuge),
-                    1em * var(--ratio),
-                    var(--max-font-size, infinity * 1px));
-        }
-
-        @property --container-fill-text-captured-length {
-            syntax: '<length>';
-            initial-value: 0px;
-            inherits: true;
+            /* layout debugger */
+            /* * {
+                outline: 0.5px dashed deeppink !important;
+            } */
         }
     </style>
     <meta name="author" content="Timothy Martens">
     <meta name="description" content="404: Page Not Found">
 </head>
 
-<body>
-    <h1 class="container-fill-text">
-        <span class="container-fill-text-container">
-            <span class="container-fill-text-display">404</span>
-        </span>
-        <span class="container-fill-text-reference" aria-hidden="true">404</span>
-    </h1>
+<body class="cover">
+    <header>Page Not Found</header>
+    <main>
+        <h1 class="fill-text">
+            <span class="fill-text-container">
+                <span class="fill-text-display">404</span>
+            </span>
+            <span class="fill-text-reference" aria-hidden="true">404</span>
+        </h1>
+    </main>
+    <footer><span>&copy;&apos;26 <a href="https://timagineer.com">Timagineer</a></span></footer>
 </body>
 
 </html>
