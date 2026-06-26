@@ -16,8 +16,7 @@ Andy Bell: https://piccalil.li/blog/riffing-on-the-latest-css-fit-text-approach/
         @layer config {
 
             :where(:host, :root) {
-
-                /* Typography */
+                color-scheme: light dark;
                 --text-mono: ui-monospace, monospace;
                 --text-size-10: 0.9375rem;
                 --text-size-15: 1.166rem;
@@ -28,15 +27,10 @@ Andy Bell: https://piccalil.li/blog/riffing-on-the-latest-css-fit-text-approach/
                 --text-weight-900: 900;
                 --text-size-body: clamp(var(--text-size-10), 0.8722rem + 0.3264vw, var(--text-size-15));
                 --text-size-huge: clamp(4.735625rem, 0.73rem + 19.44vw, 15.671875rem);
-
-                /* Space */
                 --space-05: 0.09375rem;
                 --space-10: 0.125rem;
                 --space-50: 1.25rem;
                 --space-55: 1.5rem;
-
-                /* Color */
-                color-scheme: light dark;
                 --brand-l: oklch(0.57125 0.23443 29.223);
                 --brand-d: oklch(0.678 0.2673 34.94);
                 --black: #000000;
@@ -49,7 +43,6 @@ Andy Bell: https://piccalil.li/blog/riffing-on-the-latest-css-fit-text-approach/
                 --slate-70: #a9b1bc;
                 --slate-88: #dde0e4;
                 --slate-96: #f4f5f6;
-
                 --brand: light-dark(var(--brand-l), var(--brand-d));
                 --canvas: light-dark(var(--slate-96), var(--slate-06));
                 --text-body: light-dark(var(--slate-12), var(--slate-88));
@@ -58,7 +51,6 @@ Andy Bell: https://piccalil.li/blog/riffing-on-the-latest-css-fit-text-approach/
                 --text-underline-hover: var(--canvas);
                 --focus-ring-color: light-dark(var(--black), var(--white));
                 --focus-ring-color-outer: light-dark(var(--white), var(--black));
-
                 --link-transition: color 420ms ease, text-decoration-color 420ms ease, text-underline-offset 240ms cubic-bezier(.9, 0, .1, 1);
             }
         }
@@ -78,6 +70,13 @@ Andy Bell: https://piccalil.li/blog/riffing-on-the-latest-css-fit-text-approach/
                 line-height: var(--text-leading);
             }
 
+            :focus-visible {
+                outline: 3px solid var(--focus-ring-color);
+                outline-offset: 3px;
+                border-radius: 3px;
+                box-shadow: 0 0 0 6px var(--focus-ring-color-outer);
+            }
+
             @media (prefers-reduced-motion: no-preference) {
                 html {
                     scroll-behavior: smooth;
@@ -94,7 +93,6 @@ Andy Bell: https://piccalil.li/blog/riffing-on-the-latest-css-fit-text-approach/
                     animation-iteration-count: 1 !important;
                 }
             }
-
         }
 
         @layer native {
@@ -137,12 +135,6 @@ Andy Bell: https://piccalil.li/blog/riffing-on-the-latest-css-fit-text-approach/
                 font-weight: var(--text-weight-900);
             }
 
-            :focus-visible {
-                outline: 3px solid var(--focus-ring-color);
-                outline-offset: 3px;
-                border-radius: 3px;
-                box-shadow: 0 0 0 6px var(--focus-ring-color-outer);
-            }
 
             a {
                 color: var(--text-link);
@@ -156,7 +148,6 @@ Andy Bell: https://piccalil.li/blog/riffing-on-the-latest-css-fit-text-approach/
                 text-underline-offset: var(--space-55);
                 text-decoration-color: var(--text-underline-hover);
             }
-
         }
 
         @layer layouts {
