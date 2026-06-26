@@ -1,4 +1,4 @@
-# tmpl
+# repo template
 
 description
 
