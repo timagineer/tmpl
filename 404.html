@@ -49,6 +49,7 @@ Andy Bell: https://piccalil.li/blog/riffing-on-the-latest-css-fit-text-approach/
                 --text-link: light-dark(var(--slate-30), var(--slate-70));
                 --text-muted: light-dark(var(--slate-40), var(--slate-58));
                 --text-underline-hover: var(--canvas);
+                --selected: light-dark(var(--slate-30), var(--slate-40));
                 --focus-ring-color: light-dark(var(--black), var(--white));
                 --focus-ring-color-outer: light-dark(var(--white), var(--black));
                 --link-transition: color 420ms ease, text-decoration-color 420ms ease, text-underline-offset 240ms cubic-bezier(.9, 0, .1, 1);
@@ -70,12 +71,6 @@ Andy Bell: https://piccalil.li/blog/riffing-on-the-latest-css-fit-text-approach/
                 line-height: var(--text-leading);
             }
 
-            :focus-visible {
-                outline: 3px solid var(--focus-ring-color);
-                outline-offset: 3px;
-                border-radius: 3px;
-                box-shadow: 0 0 0 6px var(--focus-ring-color-outer);
-            }
 
             @media (prefers-reduced-motion: no-preference) {
                 html {
@@ -135,7 +130,6 @@ Andy Bell: https://piccalil.li/blog/riffing-on-the-latest-css-fit-text-approach/
                 font-weight: var(--text-weight-900);
             }
 
-
             a {
                 color: var(--text-link);
                 text-underline-offset: var(--space-10);
@@ -147,6 +141,18 @@ Andy Bell: https://piccalil.li/blog/riffing-on-the-latest-css-fit-text-approach/
                 color: var(--brand);
                 text-underline-offset: var(--space-55);
                 text-decoration-color: var(--text-underline-hover);
+            }
+
+            :focus-visible {
+                outline: 3px solid var(--focus-ring-color);
+                outline-offset: 3px;
+                border-radius: 3px;
+                box-shadow: 0 0 0 6px var(--focus-ring-color-outer);
+            }
+
+            ::selection {
+                color: var(--brand);
+                background-color: var(--selected);
             }
         }
 
