@@ -35,10 +35,9 @@ Andy Bell: https://piccalil.li/blog/riffing-on-the-latest-css-fit-text-approach/
                 --space-50: 1.25rem;
                 --space-55: 1.5rem;
 
-                color-scheme: light dark;
-
                 /* Color */
-                --brand-l: oklch(57.125% 0.23443 29.223);
+                color-scheme: light dark;
+                --brand-l: oklch(0.57125 0.23443 29.223);
                 --brand-d: oklch(0.678 0.2673 34.94);
                 --black: #000000;
                 --white: #ffffff;
@@ -85,6 +84,17 @@ Andy Bell: https://piccalil.li/blog/riffing-on-the-latest-css-fit-text-approach/
                 }
             }
 
+            @media (prefers-reduced-motion: reduce) {
+
+                *,
+                *::before,
+                *::after {
+                    transition-duration: 0.01ms !important;
+                    animation-duration: 0.01ms !important;
+                    animation-iteration-count: 1 !important;
+                }
+            }
+
         }
 
         @layer native {
@@ -123,15 +133,15 @@ Andy Bell: https://piccalil.li/blog/riffing-on-the-latest-css-fit-text-approach/
                 text-transform: uppercase;
             }
 
+            h1 {
+                font-weight: var(--text-weight-900);
+            }
+
             :focus-visible {
                 outline: 3px solid var(--focus-ring-color);
                 outline-offset: 3px;
                 border-radius: 3px;
                 box-shadow: 0 0 0 6px var(--focus-ring-color-outer);
-            }
-
-            h1 {
-                font-weight: var(--text-weight-900);
             }
 
             a {
